@@ -1,6 +1,6 @@
 def get_file(file_name):
     try:
-        with open('templates/memories/{}.md'.format(file_name)) as file:
+        with open('memories/{}.md'.format(file_name)) as file:
             content = file.read()
     except FileNotFoundError:
         content = ''
@@ -9,7 +9,7 @@ def get_file(file_name):
 
 def get_preview_file(file_name):
     try:
-        with open('templates/memories/{}-preview.md'.format(file_name)) as file:
+        with open('memories/{}-preview.md'.format(file_name)) as file:
             content = file.read()
         return content
     except FileNotFoundError:
