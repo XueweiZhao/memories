@@ -1,0 +1,57 @@
+{% extends "base.jinja" %}
+
+{% block css %}
+<style>
+    #edit-memory #content {
+        height: calc(100% - 40px);
+        display: flex;
+    }
+    form {
+        flex: 0 0 calc(50% - 20px);
+        display: flex;
+        flex-direction: column;
+    }
+    input[type="submit"] {
+        width: 100px;
+        padding: 10px;
+        margin: 10px auto;
+    }
+    #markdown {
+        flex: 1;
+        padding: 0 10px;
+        width: 100%;
+    }
+    #preview {
+        flex: 0 0 50%;
+        padding-left: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block body_id %}edit-memory{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('memories.edit_post', year=year, month=month, day=day) }}" method="post">
+    <textarea id="markdown" name="content">{{ raw_content }}</textarea>
+    <input type="submit" value="Preview" />
+</form>
+<div id="preview">{{ content }}</div>
+
+{% endblock %}
+
+{% block additional_js %}
+<script type="text/javascript">
+    function auto_grow(element) {
+        element.style.height = "5px";
+        element.style.height = (element.scrollHeight)+"px";
+    }
+    window.onload = function() {
+        var textarea = document.getElementById('markdown');
+        auto_grow(textarea);
+        textarea.onkeyup = auto_grow(textarea);
+    };
+    window.onbeforeunload = function() {
+        alert('You have not saved!')
+    }
+</script>
+{% endblock %}

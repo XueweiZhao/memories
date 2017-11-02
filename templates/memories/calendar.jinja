@@ -1,0 +1,102 @@
+{% extends "base.jinja" %}
+
+{% block css %}
+<style>
+    .calendar {
+        width: 80%;
+        margin: 0 auto;
+        min-height: 700px;
+        text-align: center;
+    }
+    .calendar .title {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+    .calendar .header,
+    .calendar .row {
+        border-bottom: grey 1px solid;
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    .calendar .header {
+        font-size: 18px;
+    }
+    .calendar .row {
+        font-size: 16px;
+    }
+    .calendar .day {
+        flex: 0 0 calc(1 / 7 * 100% - 20px);
+        padding: 10px;
+    }
+    .calendar .row .day:not(.-day-7) {
+        border-right: grey 1px solid;
+    }
+    .calendar .row .day {
+        height: 60px;
+    }
+    .control,
+    .search {
+        display: flex;
+        justify-content: center;
+    }
+    .control a {
+        padding: 10px;
+        margin: 10px;
+    }
+    .search * {
+        padding: 5px;
+        margin: 5px;
+        text-align: center;
+    }
+    .search input {
+        background-color: inherit;
+        border-top: none;
+        border-right: none;
+        border-left: none;
+    }
+    .search input,
+    .search button {
+        outline: none;
+        width: 100px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="calendar">
+    <div class="title">{{ month_label }} {{ year }}</div>
+    <div class="header">
+        <span class="day -day-1">Mon</span>
+        <span class="day -day-2">Tue</span>
+        <span class="day -day-3">Wed</span>
+        <span class="day -day-4">Thu</span>
+        <span class="day -day-5">Fri</span>
+        <span class="day -day-6">Sat</span>
+        <span class="day -day-7">Sun</span>
+    </div>
+    {% for row in [0, 1, 2, 3, 4, 5] %}
+    <div class="row">
+        {% for col in [0, 1, 2, 3, 4, 5, 6] %}
+        {% if row * 7 + col < month_list | length %}
+        {% set day = month_list[row * 7 + col] %}
+        <a href="{{ url_for('memories.memory', year=year, month=month, day=day) if day else '#' }}" class="day -day-{{ col + 1 }}">{{ day }}</a>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+<div class="control">
+    {% set prev_year = year if month > 1 else year - 1 %}
+    {% set prev_month = month - 1 if month > 1 else 12 %}
+    {% set next_year = year if month < 12 else year + 1 %}
+    {% set next_month = month + 1 if month < 12 else 1 %}
+    <a href="{{ url_for('memories.calendar', year=prev_year, month=prev_month) }}">Last Month <-</a>
+    <a href="{{ url_for('memories.calendar', year=next_year, month=next_month) }}">-> Next Month</a>
+</div>
+<form class="search" action="{{ url_for('memories.calendar_go') }}" method="post">
+    <span class="title">Search a date: </span>
+    <input name="year" type="number" placeholder="year" required />
+    <input name="month" type="number" placeholder="month" required />
+    <button type="submit" id="go-to-date">Go</button>
+</form>
+{% endblock %}

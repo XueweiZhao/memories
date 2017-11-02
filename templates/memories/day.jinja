@@ -1,0 +1,20 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<nav>
+    <a href="{{ url_for('memories.calendar', year=year, month=month) }}"><- Back to Calendar</a>
+</nav>
+{% if content %}
+<div id="preview">
+    {{ content }}
+    <a href="{{ url_for('memories.edit', year=year, month=month, day=day) }}">Edit</a>
+</div>
+{% else %}
+<div id="preview">
+    <h1>{{ month }}月{{ day }}日</h1>
+    <h2>Oops...</h2>
+    <p>There's no memory on this day, do you want to create one?</p>
+    <a href="{{ url_for('memories.edit', year=year, month=month, day=day) }}">Create Memory</a>
+</div>
+{% endif %}
+{% endblock %}

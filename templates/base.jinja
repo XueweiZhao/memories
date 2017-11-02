@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>My Memories</title>
+    <style type="text/css">
+        html,
+        body{
+            margin: 0;
+            height: 100%;
+            font-family: arial, sans-serif;
+            text-align: justify;
+        }
+        a,
+        a:hover,
+        a:focus,
+        a:visited {
+            color: #6C71C4;
+            text-decoration: none;
+        }
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            list-style: none;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        h2 {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        p {
+            font-size: 14px;
+            line-height: 150%;
+        }
+        header {
+            background-color: #ACA79A;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+        }
+        main {
+            display: flex;
+            flex-wrap: nowrap;
+            height: calc(100% - 40px);
+        }
+        #sidebar {
+            background-color: #EBEDEF;
+            flex: 0 0 200px;
+        }
+        .nav-link {
+            padding: 5px 10px;
+        }
+        .nav-link:hover {
+            background-color: #C7CBD1;
+        }
+        .nav-link a {
+            display: block;
+            width: 100%;
+        }
+        #content {
+            background-color: #FDF6E3;
+            flex: 1;
+            padding: 20px;
+        }
+        #content a:hover {
+            background-color: #F2ECD9;
+        }
+    </style>
+    {% block css %}{% endblock %}
+</head>
+<body id="{% block body_id %}{% endblock %}">
+    <header>
+        <a class="navbar-brand" href="{{ url_for('index.index') }}">My Memories</a>
+    </header>
+    <main>
+        <nav id="sidebar" class="bg-light">
+            <ul class="left-nav">
+                <li class="nav-link"><a href="{{ url_for('memories.calendar', year=2014) }}">2014年</a></li>
+                <li class="nav-link"><a href="{{ url_for('memories.calendar', year=2015) }}">2015年</a></li>
+                <li class="nav-link"><a href="{{ url_for('memories.calendar', year=2016) }}">2016年</a></li>
+                <li class="nav-link"><a href="{{ url_for('memories.calendar', year=2014) }}">2017年</a></li>
+            </ul>
+        </nav>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    {% block additional_js %}{% endblock %}
+</body>
+</html>
