@@ -79,7 +79,11 @@
         {% for col in [0, 1, 2, 3, 4, 5, 6] %}
         {% if row * 7 + col < month_list | length %}
         {% set day = month_list[row * 7 + col] %}
+        {% if day %}
         <a href="{{ url_for('memories.memory', year=year, month=month, day=day) if day else '#' }}" class="day -day-{{ col + 1 }}">{{ day }}</a>
+        {% else %}
+        <span class="day -day-{{ col + 1 }}"></span>
+        {% endif %}
         {% endif %}
         {% endfor %}
     </div>
