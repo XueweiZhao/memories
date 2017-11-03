@@ -1,3 +1,10 @@
+import os
+
+
+def is_file_exist(file_name):
+    return os.path.isfile('memories/{}.md'.format(file_name))
+
+
 def get_file(file_name):
     try:
         with open('memories/{}.md'.format(file_name)) as file:

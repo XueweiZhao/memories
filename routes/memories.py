@@ -15,13 +15,14 @@ def calendar(year, month=1):
     except NotValidDateError:
         abort(404)
 
-    month_label, month_list = get_calendar_data(year, month)
+    month_label, month_list, month_file_list = get_calendar_data(year, month)
     return render_template(
         'memories/calendar.jinja',
         year=year,
         month=month,
         month_label=month_label,
         month_list=month_list,
+        month_file_list=month_file_list,
     )
 
 
