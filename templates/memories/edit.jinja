@@ -3,7 +3,7 @@
 {% block css %}
 <style>
     #edit-memory #content {
-        height: calc(100% - 40px);
+        min-height: calc(100% - 40px);
         display: flex;
     }
     form {
@@ -35,7 +35,10 @@
     <textarea id="markdown" name="content">{{ raw_content }}</textarea>
     <input type="submit" value="Preview" />
 </form>
-<div id="preview">{{ content }}</div>
+<form id="preview" action="{{ url_for('memories.save', year=year, month=month, day=day) }}" method="post">
+    {{ content }}
+    <input type="submit" value="Save" />
+</form>
 
 {% endblock %}
 
@@ -50,8 +53,5 @@
         auto_grow(textarea);
         textarea.onkeyup = auto_grow(textarea);
     };
-    window.onbeforeunload = function() {
-        alert('You have not saved!')
-    }
 </script>
 {% endblock %}

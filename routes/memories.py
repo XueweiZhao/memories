@@ -2,7 +2,7 @@ import markdown
 import os
 from flask import abort, Blueprint, Markup, redirect, render_template, request, url_for
 from utils.calendar import get_calendar_data, NotValidDateError, validate_date
-from utils.files import get_file, get_preview_file
+from utils.files import MemoryFile
 
 blueprint = Blueprint('memories', __name__)
 
@@ -36,8 +36,8 @@ def calendar_go():
 
 @blueprint.route('/memories/<int:year>/<int:month>/<int:day>/')
 def memory(year, month, day):
-    filename = '{}-{}-{}'.format(year, month, day)
-    content = Markup(markdown.markdown(get_file(filename)))
+    content = MemoryFile(year, month, day).get_content()
+    content = Markup(markdown.markdown(content))
     return render_template(
         'memories/day.jinja',
         year=year,
@@ -49,8 +49,7 @@ def memory(year, month, day):
 
 @blueprint.route('/memories/<int:year>/<int:month>/<int:day>/edit/')
 def edit(year, month, day):
-    filename = '{}-{}-{}'.format(year, month, day)
-    raw_content = get_preview_file(filename)
+    raw_content = MemoryFile(year, month, day).get_preview_content()
     content = Markup(markdown.markdown(raw_content))
     return render_template(
         'memories/edit.jinja',
@@ -65,16 +64,11 @@ def edit(year, month, day):
 @blueprint.route('/memories/<int:year>/<int:month>/<int:day>/edit/', methods=['POST'])
 def edit_post(year, month, day):
     content = request.form.get('content', '')
-    out_filename = 'templates/memories/{}-{}-{}-preview.md'.format(year, month, day)
-
-    dir_name = os.path.dirname(out_filename) or '.'
-    if dir_name:
-        try:
-            os.makedirs(dir_name)
-        except OSError:  # Already exists
-            pass
-
-    out_file = open(out_filename, 'w+')
-    out_file.write(content)
-    out_file.close()
+    MemoryFile(year, month, day).write_preview(content)
     return redirect(url_for('memories.edit', year=year, month=month, day=day))
+
+
+@blueprint.route('/memories/<int:year>/<int:month>/<int:day>/save/', methods=['POST'])
+def save(year, month, day):
+    MemoryFile(year, month, day).save_preview()
+    return redirect(url_for('memories.memory', year=year, month=month, day=day))

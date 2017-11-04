@@ -1,6 +1,6 @@
 from datetime import date
 
-from utils.files import is_file_exist
+from utils.files import MemoryFile
 
 MONTH_LABELS = [
     'January',
@@ -52,7 +52,7 @@ def get_calendar_data(year, month):
     month_list += range(1, month_length + 1)
 
     month_file_list = [
-        is_file_exist('{}-{}-{}'.format(year, month, day))
+        MemoryFile(year, month, day).exists()
         for day in month_list
     ]
     return month_label, month_list, month_file_list
